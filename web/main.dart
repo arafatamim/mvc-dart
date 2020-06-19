@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:html';
 
 class Todo {
-  int id;
-  String text;
-  bool complete;
+  final int id;
+  final String text;
+  final bool complete;
 
   Todo({this.id, this.text, this.complete});
   Todo.fromJson(Map<String, dynamic> json)
