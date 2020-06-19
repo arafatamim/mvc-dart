@@ -21,8 +21,8 @@ class Model {
 
   Model() {
     final items = json.decode(window.localStorage['todos'] ?? '[]') as List;
-    if (items != null) {
-      todos = items.map((todo) => Todo.fromJson(todo)).toList();
+    if (items.isNotEmpty) {
+      todos = items.map((item) => Todo.fromJson(item)).toList();
     }
   }
   void _commit(List<Todo> todos) {
@@ -109,9 +109,7 @@ class View {
   }
 
   String get _todoText => input.value;
-  void _resetInput() {
-    input.value = '';
-  }
+  void _resetInput() => input.value = '';
 
   Element getElement(String selector) {
     final element = querySelector(selector);
@@ -235,16 +233,12 @@ class Controller {
 
   Controller(this.model, this.view) {
     onTodoListChanged(model.todos);
-    view.bindAddTodo((todoText) {
-      handleAddTodo(todoText);
-    });
+    view.bindAddTodo(handleAddTodo);
     view.bindDeleteTodo(handleDeleteTodo);
     view.bindToggleTodo(handleToggleTodo);
     view.bindEditTodo(handleEditTodo);
 
-    model.bindTodoListChanged((todos) {
-      onTodoListChanged(todos);
-    });
+    model.bindTodoListChanged(onTodoListChanged);
   }
 
   void onTodoListChanged(List<Todo> todos) => view.displayTodos(todos);
